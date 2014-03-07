@@ -101,7 +101,12 @@ namespace Clipper
                         }
 
                         // Display player name attached to..
-                        this.InvokeEx(f => { var name = Player.Name; f.ssCharacterName.Text = (String.IsNullOrEmpty(name)) ? "None" : name; });
+                        this.InvokeEx(f =>
+                            {
+                                var name = Player.Name; 
+                                f.ssCharacterName.Text = (String.IsNullOrEmpty(name)) ? "None" : name;
+                                f.niTrayIcon.Text = (String.IsNullOrEmpty(name)) ? "Clipper" : name; 
+                            });
                     }
                 })
                 {
