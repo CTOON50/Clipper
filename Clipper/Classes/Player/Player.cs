@@ -320,13 +320,13 @@ namespace Clipper.Classes.Player
                 var flag = Player.GMFlag;
                 if (value == 0)
                 {
-                    if ((flag & 0x20) != 0)
-                        flag -= 0x20;
+                    if ((flag & 0x2000) != 0)
+                        flag -= 0x2000;
                     Memory.Poke(Globals.Instance.CurrentProcess, mobPtr + Globals.Instance.GetOffset("MOB_FLAG"), BitConverter.GetBytes(flag));
                 }
                 else
                 {
-                    flag |= 0x20;
+                    flag |= 0x2000;
                     Memory.Poke(Globals.Instance.CurrentProcess, mobPtr + Globals.Instance.GetOffset("MOB_FLAG"), BitConverter.GetBytes(flag));
                 }
             }
