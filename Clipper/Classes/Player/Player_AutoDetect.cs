@@ -124,14 +124,21 @@ namespace Clipper.Classes.Player
                 }
 
                 // Read the entity visible flag..
-                var visibleBuffer = new byte[1];
+                var visibleBuffer = new byte[4];
                 Memory.Peek(Globals.Instance.CurrentProcess, (IntPtr)BitConverter.ToInt32(tempBuffer, 0) + Globals.Instance.GetOffset("MOB_RENDER"), visibleBuffer);
-                if (visibleBuffer[0] != 4 && visibleBuffer[0] != 8 &&
-                    visibleBuffer[0] != 12 && // Chocobo
-                    visibleBuffer[0] != 20 && visibleBuffer[0] != 28) // Fishing..?
+                if ((BitConverter.ToInt32(visibleBuffer, 0) & 0x200) == 0)
                 {
                     continue;
                 }
+
+                //var visibleBuffer = new byte[1];
+                //Memory.Peek(Globals.Instance.CurrentProcess, (IntPtr)BitConverter.ToInt32(tempBuffer, 0) + Globals.Instance.GetOffset("MOB_RENDER"), visibleBuffer);
+                //if (visibleBuffer[0] != 4 && visibleBuffer[0] != 8 &&
+                //    visibleBuffer[0] != 12 && // Chocobo
+                //    visibleBuffer[0] != 20 && visibleBuffer[0] != 28) // Fishing..?
+                //{
+                //    continue;
+                //}
 
                 // Ignore players over 50 yalms away..
                 var mobDistance = new byte[4];
