@@ -91,17 +91,6 @@ namespace Clipper.Classes.Player
                 if (BitConverter.ToInt32(tempBuffer, 0) == 0)
                     continue;
 
-                // Ensure this entity is a player..
-                var typeBuffer = new byte[1];
-                Memory.Peek(Globals.Instance.CurrentProcess, (IntPtr)BitConverter.ToInt32(tempBuffer, 0) + Globals.Instance.GetOffset("MOB_TYPE"), typeBuffer);
-                if (typeBuffer[0] != 0)
-                {
-                    var spawnBuffer = new byte[1];
-                    Memory.Peek(Globals.Instance.CurrentProcess, (IntPtr)BitConverter.ToInt32(tempBuffer, 0) + Globals.Instance.GetOffset("MOB_SPAWNTYPE"), spawnBuffer);
-                    if (spawnBuffer[0] != 1)
-                        continue;
-                }
-
                 // Read the entity name..
                 var nameBuffer = new byte[25];
                 Memory.Peek(Globals.Instance.CurrentProcess, (IntPtr)BitConverter.ToInt32(tempBuffer, 0) + Globals.Instance.GetOffset("MOB_NAME"), nameBuffer);
@@ -112,8 +101,20 @@ namespace Clipper.Classes.Player
                     entityName = entityName.Substring(0, nameIndex);
 
                 // Check if name is valid..
-                if (String.IsNullOrWhiteSpace(entityName) || entityName[0] == 0x00 || Player.Name.Equals(entityName))
+                if (String.IsNullOrWhiteSpace(entityName) || entityName[0] == 0x00 || Player.Name.Equals(entityName) || entityName.Length < 3)
                     continue;
+
+                // Ensure this entity is a player..
+                var typeBuffer = new byte[1];
+                Memory.Peek(Globals.Instance.CurrentProcess, (IntPtr)BitConverter.ToInt32(tempBuffer, 0) + Globals.Instance.GetOffset("MOB_TYPE"), typeBuffer);
+                if (typeBuffer[0] != 0)
+                {
+                    var spawnBuffer = new byte[4];
+                    Memory.Peek(Globals.Instance.CurrentProcess, (IntPtr)BitConverter.ToInt32(tempBuffer, 0) + Globals.Instance.GetOffset("MOB_SPAWNTYPE"), spawnBuffer);
+                    var spawnType = BitConverter.ToInt32(spawnBuffer, 0);
+                    if (spawnType != 0x0D && spawnType != 0x01)
+                        continue;
+                }
 
                 if (Player.UseExclusions)
                 {
@@ -127,18 +128,7 @@ namespace Clipper.Classes.Player
                 var visibleBuffer = new byte[4];
                 Memory.Peek(Globals.Instance.CurrentProcess, (IntPtr)BitConverter.ToInt32(tempBuffer, 0) + Globals.Instance.GetOffset("MOB_RENDER"), visibleBuffer);
                 if ((BitConverter.ToInt32(visibleBuffer, 0) & 0x200) == 0)
-                {
                     continue;
-                }
-
-                //var visibleBuffer = new byte[1];
-                //Memory.Peek(Globals.Instance.CurrentProcess, (IntPtr)BitConverter.ToInt32(tempBuffer, 0) + Globals.Instance.GetOffset("MOB_RENDER"), visibleBuffer);
-                //if (visibleBuffer[0] != 4 && visibleBuffer[0] != 8 &&
-                //    visibleBuffer[0] != 12 && // Chocobo
-                //    visibleBuffer[0] != 20 && visibleBuffer[0] != 28) // Fishing..?
-                //{
-                //    continue;
-                //}
 
                 // Ignore players over 50 yalms away..
                 var mobDistance = new byte[4];
