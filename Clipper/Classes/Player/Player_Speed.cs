@@ -38,6 +38,8 @@ namespace Clipper.Classes.Player
             // Loop while the speed hack is enabled..
             while (Player.UseSpeedHack && !Globals.Instance.IsClosing)
             {
+                if (Player.Speed != Player.SpeedAmount)
+                    Player.SpeedAmountDisabled = Player.Speed;
                 if (Player.IsDetectingPlayer && Player.AutoDisableSpeedHack)
                     Player.Speed = Player.SpeedAmountDisabled;
                 else

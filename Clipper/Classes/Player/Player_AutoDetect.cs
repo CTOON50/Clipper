@@ -112,7 +112,7 @@ namespace Clipper.Classes.Player
                     entityName = entityName.Substring(0, nameIndex);
 
                 // Check if name is valid..
-                if (String.IsNullOrWhiteSpace(entityName) || entityName[0] == 0x00 || Player.Name.Equals(entityName))
+                if (String.IsNullOrWhiteSpace(entityName) || entityName[0] == 0x00 || Player.Name.Equals(entityName) || entityName.Length < 3)
                     continue;
 
                 if (Player.UseExclusions)
