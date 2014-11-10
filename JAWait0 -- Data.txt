@@ -22,3 +22,4 @@ JAWait0 -- Engage Lock -- 66 FF 81 ?? ?? ?? ?? 66 C7 81 ?? ?? ?? ?? 08 07 C3
 FFXiMain.dll+97560 - 66 FF 81 04010000      - inc word ptr [ecx+00000104]
 FFXiMain.dll+97567 - 66 C7 81 06010000 0807 - mov word ptr [ecx+00000106],0708
 FFXiMain.dll+97570 - C3                     - ret 
+ 
